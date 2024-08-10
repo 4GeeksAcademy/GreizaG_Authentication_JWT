@@ -76,7 +76,7 @@ def serve_any_other_file(path):
     response.cache_control.max_age = 0  # avoid cache memory
     return response
 
-@app.route("/login", methods=["POST"])
+@app.route("/api/login", methods=["POST"])
 def login():
     body = request.get_json(silent=True)
     if body is None:
@@ -96,6 +96,13 @@ def login():
     
     access_token = create_access_token(identity=user[0].email)
     return jsonify({'msg': 'ok', 'access_token':access_token}, 200)
+
+@app.route("/api/private", methods=['GET'])
+@jwt_required()
+def private():
+    identity = get_jwt_identity()
+    print(identity)
+    return jsonify({'msg': 'Esta es una ventana privada'})
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
