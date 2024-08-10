@@ -10,6 +10,7 @@ from api.models import db
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
+from api.models import User
 
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -84,7 +85,17 @@ def login():
         return jsonify({'msg': 'Debes ingresar email'}), 400
     if 'password' not in body:
         return jsonify({'msg': 'Debes ingresar la contraseña'}), 400
-    return jsonify({'msg': 'ok'}), 200
+    
+    user = User.query.filter_by(email=body['email']).all()
+    print(user)
+    if len(user) == 0:
+        return jsonify({'msg': 'Usuario o contraseña invalidos'}), 400
+    print(user[0].password, body['password'])
+    if user[0].password != body['password']:
+        return jsonify({'msg': 'Usuario o contraseña invalidos'}), 400
+    
+    access_token = create_access_token(identity=user[0].email)
+    return jsonify({'msg': 'ok', 'access_token':access_token}, 200)
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
