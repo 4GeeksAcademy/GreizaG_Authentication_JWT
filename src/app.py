@@ -11,6 +11,7 @@ from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
 from api.models import User
+from flask_cors import CORS
 
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -23,6 +24,7 @@ ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), '../public/')
 app = Flask(__name__)
+CORS(app)
 app.url_map.strict_slashes = False
 
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT-KEY") # super secret
@@ -75,6 +77,30 @@ def serve_any_other_file(path):
     response = send_from_directory(static_file_dir, path)
     response.cache_control.max_age = 0  # avoid cache memory
     return response
+
+@app.route("/api/newuser", methods=['POST'])
+def new_user():
+    body = request.get_json(silent=True)
+    if body is None:
+        return jsonify({'msg': 'Debes ingresar información'}), 400 # 400 Bad Request
+    if 'name' not in body:
+        return jsonify({'msg': 'Debes ingresar nombre'}), 400
+    if 'last_name' not in body:
+        return jsonify({'msg': 'Debes ingresar apellido'}), 400
+    if 'email' not in body:
+        return jsonify({'msg': 'Debes ingresar email'}), 400
+    if 'password' not in body:
+        return jsonify({'msg': 'Debes ingresar la contraseña'}), 400
+    
+    new_user = User()
+    new_user.name = body["name"]
+    new_user.last_name = body["last_name"]
+    new_user.email = body["email"]
+    new_user.password = body["password"]
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({"data": new_user.serialize()}), 201
 
 @app.route("/api/login", methods=["POST"])
 def login():

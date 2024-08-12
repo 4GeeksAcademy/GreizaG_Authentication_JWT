@@ -13,7 +13,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
-			]
+			],
+
+			users: []
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -22,14 +24,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getMessage: async () => {
-				try{
+				try {
 					// fetching data from the backend
 					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
 					const data = await resp.json()
 					setStore({ message: data.message })
 					// don't forget to return something, that is how the async resolves
 					return data;
-				}catch(error){
+				} catch (error) {
 					console.log("Error loading message from backend", error)
 				}
 			},
@@ -46,7 +48,31 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				//reset the global store
 				setStore({ demo: demo });
-			}
+			},
+
+			newUser: (data) => {
+				const actions = getActions()
+				return fetch(process.env.BACKEND_URL + "/api/newuser", {
+					method: "POST",
+					body: JSON.stringify(data),
+					headers: { "Content-Type": "application/json" }
+				})
+					.then(response => {
+						console.log(response)
+						if (response.ok) {
+							return response.json()
+						}
+						throw new Error("Ocurrió un error creando un nuevo usuario")
+					})
+					.then(data => {
+						console.log(data)
+						return true
+					})
+					.catch(error => {
+						console.log(error)
+						return false
+					})
+			},
 		}
 	};
 };

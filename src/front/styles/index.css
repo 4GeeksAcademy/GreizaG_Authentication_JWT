@@ -1,3 +1,81 @@
-/* 
-    General Styles used on every website (Don't Repeat Yourself)
-*/
+/* body {
+    background-image: url("https://cdn.intercars.eu/files/5/9/5/4/1/59541/670x.jpg?v=2020-09-08");
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://cdn.intercars.eu/files/5/9/5/4/1/59541/670x.jpg?v=2020-09-08');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-size: cover;
+    background-position: center;
+} */
+
+.link {
+    text-decoration: none;
+    color: #cc5500;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: large;
+}
+
+.navbar {
+    background-color: #cc550045;
+}
+
+.btn {
+    background-color: #cc5500;
+    border-radius: 20px;
+    border-style: double;
+    border-color: white;
+    color: white;
+    width: 80px;
+}
+
+.btn:hover {
+    scale: 110%;
+    color: #cfcfcf
+}
+
+body {
+    background-color: #dcdcdc40;
+}
+
+.share-tech-regular {
+    font-family: "Share Tech", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  .footer {
+    background-color: #cc5500;
+  }
+
+  .card-header {
+    color: #cc5500;
+  }
+
+  .spare-card-body {
+    font-size: smaller;
+  }
+
+.spare-card-footer {
+    background-color: #cfcfcf50;
+}
+
+.spare-card {
+    border-color: #cc5500;
+    border-style: double;
+}
+
+i {
+    color: grey;
+}
+
+i:hover {
+    scale: 120%
+}
+
+.new-user {
+    border: solid;
+    border-color: #cc5500;
+    border-radius: 10px;
+    margin-top: 30px;
+    padding: 10px;
+    width: 750px
+  }
