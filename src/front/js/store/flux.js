@@ -73,6 +73,68 @@ const getState = ({ getStore, getActions, setStore }) => {
 						return false
 					})
 			},
+
+			// login: async (email, password) => {
+			// 	try {
+			// 		const response = await fetch(process.env.BACKEND_URL + "/api/login", {
+			// 			method: "POST",
+			// 			headers: { "Content-Type": "application/json" },
+			// 			body: JSON.stringify({ email, password })
+			// 		});
+
+			// 		if (!response.ok) {
+			// 			const errorData = await response.json();
+			// 			throw new Error(errorData.msg);
+			// 		}
+
+			// 		const data = await response.json();
+			// 		console.log(data.access_token);					
+			// 		localStorage.setItem("access_token", data.access_token);
+			// 		localStorage.setItem("id", `${data.id}`)
+			// 		localStorage.setItem("email", data.email)
+			// 		return { success: true };
+			// 	} catch (error) {
+			// 		console.error("Error:", error);
+			// 		return { success: false };
+			// 	}
+			// },
+
+			login: async (email, password) => {
+				try {
+					const response = await fetch(process.env.BACKEND_URL + "/api/login", {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({ email, password })
+					});
+
+					if (!response.ok) {
+						const errorData = await response.json();
+						return { success: false, message: errorData.msg || "Login no existoso", status: response.status };
+					}
+
+					const data = await response.json();
+					console.log(data.access_token);
+
+					// Verifica si localStorage está disponible
+					if (typeof localStorage !== "undefined") {
+						localStorage.setItem("access_token", data.access_token);
+						localStorage.setItem("id", `${data.id}`);
+						localStorage.setItem("email", data.email);
+					} else {
+						console.warn("localStorage is not available.");
+					}
+
+					return { success: true, data: data };
+				} catch (error) {
+					console.error("Error:", error);
+					return { success: false, message: error.message || "Ocurrió un error inesperado" };
+				}
+			},
+
+			// logout: () => {
+			// 	localStorage.removeItem('access_token');
+			//  navigate('/login')
+			// }
 		}
 	};
 };
