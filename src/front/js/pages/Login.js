@@ -19,7 +19,7 @@ const Login = () => {
 
         if (result.success) {
             console.log("Login exitoso!");
-            navigate('/private')
+            navigate('/privateview')
         } else {
             setErrorMessage(result.message || "Login no exitoso");
         }

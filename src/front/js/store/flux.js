@@ -1,3 +1,5 @@
+import { Navigate } from "react-router-dom";
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
@@ -130,10 +132,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 			},
 
-			// logout: () => {
-			// 	localStorage.removeItem('access_token');
-			//  navigate('/login')
-			// }
+			logout: () => {
+				localStorage.removeItem('access_token');
+				setStore({ singleUser: {} });
+				Navigate('/')
+			}
 		}
 	};
 };

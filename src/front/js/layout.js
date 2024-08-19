@@ -15,7 +15,8 @@ import { PrincipalNavbar } from "./component/PrincipalNavbar";
 import { PrincipalPage } from "./pages/PrincipalPage";
 import Login from "./pages/Login";
 import { SignUp } from "./pages/SignUp";
-import { Private } from "./pages/Private";
+import { PrivateView } from "./pages/PrivateView";
+import Private from "./component/Private";
 
 //create your first component
 const Layout = () => {
@@ -33,7 +34,9 @@ const Layout = () => {
                         <Route element={<PrincipalPage />} path="/" />
                         <Route element={<Login />} path="/login" />
                         <Route element={<SignUp />} path="/signup" />
-                        <Route element={<Private />} path="/private" />
+                        <Route element={<Private/>}>
+                            <Route element={<PrivateView />} path="/privateview" />
+                        </Route>
                         <Route element={<Demo />} path="/demo" />
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<h1>Not found!</h1>} />

@@ -24,8 +24,13 @@ export const PrivateNavbar = () => {
                     </Link>
                     <span className="share-tech-regular">Ir al inicio</span>
                 </div>
-                <div>
-                    <span className="share-tech-regular">Bienvenid@ {store.singleUser.user?.name}</span>
+                <div className="d-inline-flex align-items-center">
+                    <div className="ms-auto">
+                        <span className="share-tech-regular">Bienvenid@ {store.singleUser.user?.name}</span>
+                    </div>
+                    <div className="ms-3">
+                        <button className="btn share-tech-regular" onClick={actions.logout}>Logout</button>
+                    </div>
                 </div>
             </div>
         </nav>

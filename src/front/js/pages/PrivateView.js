@@ -7,7 +7,7 @@ import { PrincipalNavbar } from "../component/PrincipalNavbar";
 import SparePartCard from "../component/SparePartCard";
 import { PrivateNavbar } from "../component/PrivateNavbar";
 
-export const Private = () => {
+export const PrivateView = () => {
     const { store, actions } = useContext(Context);
 
     return (
