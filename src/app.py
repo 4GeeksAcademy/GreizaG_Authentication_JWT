@@ -18,6 +18,8 @@ from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 
+from flask_bcrypt import Bcrypt
+
 # from models import Person
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
@@ -29,6 +31,8 @@ app.url_map.strict_slashes = False
 
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT-KEY") # super secret
 jwt = JWTManager(app)
+
+bcrypt = Bcrypt(app)
 
 # database condiguration
 db_url = os.getenv("DATABASE_URL")
@@ -96,7 +100,8 @@ def new_user():
     new_user.name = body["name"]
     new_user.last_name = body["last_name"]
     new_user.email = body["email"]
-    new_user.password = body["password"]
+    pw_hash = bcrypt.generate_password_hash(body["password"]).decode('utf-8')
+    new_user.password = pw_hash
     db.session.add(new_user)
     db.session.commit()
 
@@ -114,7 +119,8 @@ def login():
     
     user = User.query.filter_by(email=body['email']).first()
     print(user)
-    if user and user.password == body['password']:
+    if user and bcrypt.check_password_hash(user.password, body['password']):
+    # if user and user.password == body['password']:
         access_token = create_access_token(identity={"email": user.email})
         return jsonify({"msg": "ok", "access_token": access_token}), 200
 
