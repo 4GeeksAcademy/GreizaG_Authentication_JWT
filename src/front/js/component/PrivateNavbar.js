@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useContext } from "react";
+import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
 import "../../styles/home.css";
 
 export const PrivateNavbar = () => {
+    const { store, actions } = useContext(Context)
+
+    useEffect(() => {
+        actions.getSingleUser()
+    }, [])
+
+    console.log(store.singleUser)
+    console.log(store.singleUser.user?.name)
+
     return (
         <nav className="navbar">
             <div className="container d-inline-flex">
@@ -12,6 +23,9 @@ export const PrivateNavbar = () => {
                             style={{ width: '60px', height: '60px' }} />
                     </Link>
                     <span className="share-tech-regular">Ir al inicio</span>
+                </div>
+                <div>
+                    <span className="share-tech-regular">Bienvenid@ {store.singleUser.user?.name}</span>
                 </div>
             </div>
         </nav>

@@ -15,7 +15,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			],
 
-			users: []
+			users: [],
+
+			singleUser: {}
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -104,6 +106,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("Error:", error);
 					return { success: false, message: error.message || "Ocurrió un error inesperado" };
 				}
+			},
+
+			getSingleUser: () => {
+				const token = localStorage.getItem('access_token')
+				fetch(process.env.BACKEND_URL + "/api/private/singleuser", {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+						'Authorization': 'Bearer ' + token
+					}
+				})
+					.then((response) => {
+						return response.json()
+					})
+					.then((data) => {
+						console.log(data)
+						setStore({ singleUser: data })
+						return data
+					})
+					.catch((error) => {
+						console.log(error)
+					})
 			},
 
 			// logout: () => {

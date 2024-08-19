@@ -112,23 +112,22 @@ def login():
     if 'password' not in body:
         return jsonify({'msg': 'Debes ingresar la contraseña'}), 400
     
-    user = User.query.filter_by(email=body['email']).all()
+    user = User.query.filter_by(email=body['email']).first()
     print(user)
-    if len(user) == 0:
-        return jsonify({'msg': 'Usuario o contraseña invalidos'}), 400
-    print(user[0].password, body['password'])
-    if user[0].password != body['password']:
-        return jsonify({'msg': 'Usuario o contraseña invalidos'}), 400
-    
-    access_token = create_access_token(identity=user[0].email)
-    return jsonify({'msg': 'ok', 'access_token':access_token}, 200)
+    if user and user.password == body['password']:
+        access_token = create_access_token(identity={"email": user.email})
+        return jsonify({"msg": "ok", "access_token": access_token}), 200
 
-@app.route("/api/private", methods=['GET'])
+@app.route("/api/private/singleuser", methods=['GET'])
 @jwt_required()
-def private():
+def get_single_user():
     identity = get_jwt_identity()
     print(identity)
-    return jsonify({'msg': 'Esta es una ventana privada'})
+    single_user = User.query.filter_by(email=identity['email']).first()
+    if single_user is None:
+        return jsonify({'msg': 'No existe usuario con la información indicada'}), 401
+    return jsonify({'user': single_user.serialize()}), 200
+
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
